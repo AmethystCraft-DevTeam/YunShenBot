@@ -6,11 +6,14 @@ import logger from '../utils/logger';
 import commandManager from '../modules/CommandManager';
 import HelpCommand from '../modules/commands/HelpCommand';
 import StatusCommand from '../modules/commands/StatusCommand';
+import PluginManager from '../plugins/PluginManager';
+import path from 'path';
 
 export class YunShenBot {
   private bot: Bot | null = null;
   private eventManager: EventManager | null = null;
   private moduleManager: ModuleManager | null = null;
+  private pluginManager: PluginManager | null = null;
   private reconnectAttempts = 0;
   private reconnectTimeout: NodeJS.Timeout | null = null;
   private isShuttingDown = false;
@@ -72,6 +75,13 @@ export class YunShenBot {
       
       // 启用命令管理器
       await this.moduleManager.enableModule('CommandManager');
+      
+      // 初始化插件管理器
+      this.pluginManager = new PluginManager(this.bot, path.join(process.cwd(), 'dist', 'plugins'));
+      
+      // 扫描并加载插件
+      const pluginsLoaded = await this.pluginManager.scanAndLoadPlugins();
+      logger.info(`已加载 ${pluginsLoaded} 个插件`);
       
       // 从模块目录加载模块
       const modulesLoaded = await this.moduleManager.loadModules('dist/modules');
@@ -169,6 +179,11 @@ export class YunShenBot {
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout);
       this.reconnectTimeout = null;
+    }
+    
+    // 禁用所有插件
+    if (this.pluginManager) {
+      await this.pluginManager.disableAllPlugins();
     }
     
     // 禁用所有模块

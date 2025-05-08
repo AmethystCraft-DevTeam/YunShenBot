@@ -7,6 +7,7 @@
 ## 特性
 
 - **模块化设计**: 可以轻松地添加、移除和管理功能模块
+- **插件系统**: 类似NoneBot的扫描式插件加载系统
 - **事件系统**: 灵活的事件处理机制
 - **命令系统**: 易于扩展的命令处理系统
 - **配置灵活**: 通过JavaScript配置文件进行配置
@@ -30,7 +31,7 @@ npm run build
 
 ## 配置
 
-在 `src/config/botConfig.ts` 文件中修改配置：
+在 `src/config/botConfig.ts` 文件中修改基本配置：
 
 ```typescript
 // 机器人配置
@@ -48,7 +49,21 @@ const botConfig: BotConfig = {
     prefix: '!',            // 命令前缀
     autoReconnect: true,    // 自动重连
     reconnectDelay: 5000,   // 重连延迟（毫秒）
-  },
+  }
+};
+```
+
+在 `src/config/plugins.config.ts` 文件中管理插件配置：
+
+```typescript
+const pluginsConfig: PluginsConfig = {
+  // 内置插件
+  autoResponder: false,  // 自动回复插件
+  pathfinder: true,      // 寻路插件
+  chatLogger: true,      // 聊天记录插件
+  
+  // 添加自定义插件配置
+  // yourPlugin: true,
 };
 ```
 
@@ -73,71 +88,49 @@ YunShenBot/
 │   ├── config/       - 配置相关
 │   ├── core/         - 核心功能
 │   ├── events/       - 事件处理器
-│   ├── modules/      - 功能模块
+│   ├── modules/      - 内置功能模块
 │   │   └── commands/ - 命令
+│   ├── plugins/      - 插件系统和内置插件
 │   └── utils/        - 工具函数
 ├── dist/             - 编译后的文件
+└── docs/             - 文档
 ```
 
-### 创建自定义模块
+### 插件系统
 
-1. 在`src/modules`目录下创建一个新文件:
+云深Bot框架使用类似NoneBot的插件系统，只需将插件文件放入`plugins`目录，系统会自动扫描并加载。
+
+创建一个简单的插件：
 
 ```typescript
+// myPlugin.plugin.ts
 import { Bot } from 'mineflayer';
-import { BotModule } from './ModuleManager';
-import logger from '../utils/logger';
+import { Plugin } from '../src/plugins/PluginManager';
+import logger from '../src/utils/logger';
 
-export class MyModule implements BotModule {
-  name = 'MyModule';
-  description = '我的自定义模块';
-  enabled = true;
+export class MyPlugin implements Plugin {
+  name = 'myPlugin';  // 插件名称
+  description = '我的插件';
+  enabled = true;     // 默认启用状态
   
-  // 初始化
   init(bot: Bot): void {
-    logger.info('我的模块已初始化');
+    logger.info('我的插件已初始化');
   }
   
-  // 启用
   onEnable(bot: Bot): void {
-    logger.info('我的模块已启用');
+    // 当插件启用时执行...
   }
   
-  // 禁用
   onDisable(bot: Bot): void {
-    logger.info('我的模块已禁用');
+    // 当插件禁用时执行...
   }
 }
 
-// 导出模块实例
-export default new MyModule();
+export default new MyPlugin();
 ```
 
-### 创建自定义命令
-
-在`src/modules/commands`目录下创建一个新文件:
-
-```typescript
-import { Bot } from 'mineflayer';
-import { Command } from '../CommandManager';
-
-const MyCommand: Command = {
-  name: 'mycommand',
-  description: '我的自定义命令',
-  usage: '!mycommand [参数]',
-  aliases: ['mc', 'mycmd'],
-  
-  execute(bot: Bot, username: string, args: string[]): void {
-    bot.chat(`Hello, ${username}! 你使用了我的命令。`);
-    if (args.length > 0) {
-      bot.chat(`你提供的参数是: ${args.join(', ')}`);
-    }
-  }
-};
-
-export default MyCommand;
-```
+详细的插件开发指南请查看 [docs/plugin-guide.md](docs/plugin-guide.md)
 
 ## 许可证
 
-ISC © [您的姓名]
+GPL-3.0

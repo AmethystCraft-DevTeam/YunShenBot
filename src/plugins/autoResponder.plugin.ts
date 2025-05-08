@@ -1,11 +1,11 @@
 import { Bot } from 'mineflayer';
-import { BotModule } from './ModuleManager';
+import { Plugin } from './PluginManager';
 import logger from '../utils/logger';
 import { config } from '../config/config';
 
-export class AutoResponder implements BotModule {
-  name = 'AutoResponder';
-  description = '自动回复特定消息的模块';
+export class AutoResponderPlugin implements Plugin {
+  name = 'autoResponder';
+  description = '自动回复特定消息的插件';
   enabled = config.plugins?.autoResponder ?? false;
   
   private bot: Bot | null = null;
@@ -22,7 +22,7 @@ export class AutoResponder implements BotModule {
   // 初始化
   init(bot: Bot): void {
     this.bot = bot;
-    logger.info('自动回复模块已初始化');
+    logger.info('自动回复插件已初始化');
   }
   
   // 启用模块
@@ -32,7 +32,7 @@ export class AutoResponder implements BotModule {
     // 注册消息事件监听
     this.bot.on('chat', (username, message) => this.handleChat(username, message));
     
-    logger.info('自动回复模块已启用');
+    logger.info('自动回复插件已启用');
   }
   
   // 禁用模块
@@ -43,7 +43,7 @@ export class AutoResponder implements BotModule {
       this.bot.removeListener('chat', this.handleChat);
     }
     
-    logger.info('自动回复模块已禁用');
+    logger.info('自动回复插件已禁用');
   }
   
   // 添加回复模式
@@ -86,5 +86,5 @@ export class AutoResponder implements BotModule {
   }
 }
 
-// 导出模块实例
-export default new AutoResponder(); 
+// 导出插件实例
+export default new AutoResponderPlugin(); 

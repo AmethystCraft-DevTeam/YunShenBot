@@ -16,7 +16,7 @@ const botConfig: BotConfig = {
     prefix: '!',            // 命令前缀
     autoReconnect: true,    // 自动重连
     reconnectDelay: 5000,   // 重连延迟（毫秒）
-  },
+  }
 };
 
 export default botConfig; 

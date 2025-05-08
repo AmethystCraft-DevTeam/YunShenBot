@@ -17,9 +17,11 @@
     "framework"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
+    "canvas": "^3.1.0",
     "mineflayer": "^4.14.0",
+    "mineflayer-pathfinder": "^2.4.5",
     "winston": "^3.11.0"
   },
   "devDependencies": {

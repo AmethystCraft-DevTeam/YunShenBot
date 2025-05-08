@@ -1,4 +1,5 @@
 import botConfig from './botConfig';
+import pluginsConfig from './plugins.config';
 
 // 配置接口
 export interface BotConfig {
@@ -19,6 +20,10 @@ export interface BotConfig {
     autoReconnect: boolean;
     reconnectDelay: number;
   };
+  // 插件配置
+  plugins?: {
+    [key: string]: boolean | undefined;
+  };
 }
 
 // 默认配置
@@ -37,6 +42,7 @@ const defaultConfig: BotConfig = {
     autoReconnect: true,
     reconnectDelay: 5000,
   },
+  plugins: {}
 };
 
 // 合并默认配置和用户配置
@@ -47,4 +53,5 @@ export const config: BotConfig = {
   mc: { ...defaultConfig.mc, ...botConfig.mc },
   logging: { ...defaultConfig.logging, ...botConfig.logging },
   bot: { ...defaultConfig.bot, ...botConfig.bot },
+  plugins: { ...defaultConfig.plugins, ...botConfig.plugins, ...pluginsConfig }
 }; 

@@ -15,7 +15,7 @@ const botConfig: BotConfig = {
     prefix: '!',
     autoReconnect: true,
     reconnectDelay: 5000,
-  },
+  }
 };
 
 export default botConfig; 
