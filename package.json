@@ -1,0 +1,31 @@
+{
+  "name": "yunshenbot",
+  "version": "1.0.0",
+  "description": "基于mineflayer的模块化机器人框架",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "minecraft",
+    "bot",
+    "mineflayer",
+    "framework"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mineflayer": "^4.14.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "rimraf": "^5.0.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
